@@ -317,35 +317,20 @@ function ShoppingHome() {
     dispatch(fetchProductDetails(getCurrentProductId));
   }
 
-  // function handleAddToCart(getCurrentProductId) {
-  //   if (!isAuthenticated) {
-  //     // ✅ If user is not logged in, redirect to login/signup page
-  //     navigate("/auth/login");
-  //   } else {
-  //     // ✅ If user is logged in, add the product to the cart
-  //     dispatch(addToCart({ userId: user?.id, productId: getCurrentProductId, quantity: 1 }))
-  //       .then((data) => {
-  //         if (data?.payload?.success) {
-  //           dispatch(fetchCartItems(user?.id));
-  //           toast({ title: "Product is added to cart" });
-  //         }
-  //       });
-  //   }
-  // }
-
   function handleAddToCart(getCurrentProductId) {
     if (!isAuthenticated) {
-      navigate("/auth/login"); // ✅ Redirect to login if not authenticated
-      return;
+      // ✅ If user is not logged in, redirect to login/signup page
+      navigate("/auth/login");
+    } else {
+      // ✅ If user is logged in, add the product to the cart
+      dispatch(addToCart({ userId: user?.id, productId: getCurrentProductId, quantity: 1 }))
+        .then((data) => {
+          if (data?.payload?.success) {
+            dispatch(fetchCartItems(user?.id));
+            toast({ title: "Product is added to cart" });
+          }
+        });
     }
-
-    dispatch(addToCart({ userId: user?.id, productId: getCurrentProductId, quantity: 1 }))
-      .then((data) => {
-        if (data?.payload?.success) {
-          dispatch(fetchCartItems(user?.id));
-          toast({ title: "Product is added to cart" });
-        }
-      });
   }
 
 
@@ -428,7 +413,7 @@ function ShoppingHome() {
       </section>
 
       {/* Feature Products */}
-      {/* <section className="py-12">
+      <section className="py-12">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">Feature Products</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -441,27 +426,9 @@ function ShoppingHome() {
             )}
           </div>
         </div>
-      </section> */}
+      </section>
 
-<section className="py-12">
-  <div className="container mx-auto px-4">
-    <h2 className="text-3xl font-bold text-center mb-8">Feature Products</h2>
 
-    {productList.length > 0 ? (
-  productList.map((productItem) => (
-    <ShoppingProductTile
-      key={productItem.id}
-      handleGetProductDetails={handleGetProductDetails}
-      product={productItem}
-      handleAddtoCart={handleAddtoCart}
-    />
-  ))
-) : (
-  <p className="text-center text-red-500">No products available. Please check back later.</p>
-)}
-
-  </div>
-</section>
 
       <ProductDetailsDialog open={openDetailsDialog} setOpen={setOpenDetailsDialog} productDetails={productDetails} />
     </div>

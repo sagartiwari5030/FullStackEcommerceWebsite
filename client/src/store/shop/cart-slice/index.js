@@ -6,53 +6,21 @@ const initialState = {
   isLoading: false,
 };
 
-// export const addToCart = createAsyncThunk(
-//   "cart/addToCart",
-//   async ({ userId, productId, quantity }) => {
-//     const response = await axios.post(
-//       "https://fullstackecommercerameshwer.onrender.com/api/shop/cart/add",
-//       {
-//         userId,
-//         productId,
-//         quantity,
-//       }
-//     );
-
-//     return response.data;
-//   }
-// );
-
-
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
-  async ({ userId, productId, quantity }, { rejectWithValue }) => {
-    if (!productId) {
-      console.error("❌ Product ID is missing!");
-      return rejectWithValue("Product ID is missing!");
-    }
+  async ({ userId, productId, quantity }) => {
+    const response = await axios.post(
+      "https://fullstackecommercerameshwer.onrender.com/api/shop/cart/add",
+      {
+        userId,
+        productId,
+        quantity,
+      }
+    );
 
-    console.log("🛒 Adding to Cart Request: ", { userId, productId, quantity });
-
-    try {
-      const response = await axios.post(
-        "https://fullstackecommercerameshwer.onrender.com/api/shop/cart/add",
-        { userId, productId, quantity }
-      );
-
-      console.log("✅ Cart API Response: ", response.data);
-      return response.data;
-    } catch (error) {
-      console.error("❌ Add to Cart API Error:", error.response?.data || error);
-      return rejectWithValue(error.response?.data || "Error adding to cart");
-    }
+    return response.data;
   }
 );
-
-
-
-
-
-
 
 export const fetchCartItems = createAsyncThunk(
   "cart/fetchCartItems",
