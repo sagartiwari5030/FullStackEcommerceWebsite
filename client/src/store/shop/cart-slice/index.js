@@ -26,31 +26,28 @@ const initialState = {
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async ({ userId, productId, quantity }, { rejectWithValue }) => {
+    if (!productId) {
+      console.error("❌ Product ID is missing!");
+      return rejectWithValue("Product ID is missing!");
+    }
+
+    console.log("🛒 Adding to Cart Request: ", { userId, productId, quantity });
+
     try {
-      // ✅ Debugging logs
-      console.log("🛒 Sending Add to Cart Request:", { userId, productId, quantity });
-
-      if (!userId || !productId || quantity < 1) {
-        throw new Error("Invalid data! Missing userId, productId, or quantity.");
-      }
-
       const response = await axios.post(
         "https://fullstackecommercerameshwer.onrender.com/api/shop/cart/add",
-        {
-          userId,
-          productId,
-          quantity,
-        }
+        { userId, productId, quantity }
       );
 
-      console.log("🛒 Add to Cart Response:", response.data);
+      console.log("✅ Cart API Response: ", response.data);
       return response.data;
     } catch (error) {
-      console.error("❌ Add to Cart Error:", error.response?.data || error.message);
-      return rejectWithValue(error.response?.data || { message: "Failed to add to cart" });
+      console.error("❌ Add to Cart API Error:", error.response?.data || error);
+      return rejectWithValue(error.response?.data || "Error adding to cart");
     }
   }
 );
+
 
 
 

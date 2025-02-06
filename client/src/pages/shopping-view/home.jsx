@@ -537,45 +537,39 @@ function ShoppingHome() {
   // }
 
   function handleAddToCart(getCurrentProductId) {
-    if (!user || !user.id) {
-      console.error("❌ User is not logged in. Redirecting to login.");
-      navigate("/auth/login");  // 🚀 Redirect to login
+    if (!user) {
+      navigate("/auth/login");
       return;
     }
-  
+
     if (!getCurrentProductId) {
-      console.error("❌ Product ID is missing!");
+      console.error("❌ Product ID is missing when calling handleAddToCart!");
       return;
     }
-  
-    console.log("🛒 Adding product to cart:", {
+
+    console.log("🛒 Sending Add to Cart Request:", {
       userId: user?.id,
       productId: getCurrentProductId,
       quantity: 1,
     });
-  
+
     dispatch(
       addToCart({
-        userId: user.id,  // Ensure user ID exists
-        productId: getCurrentProductId, // Ensure product ID exists
-        quantity: 1, // Default quantity
+        userId: user?.id,
+        productId: getCurrentProductId,
+        quantity: 1,
       })
     ).then((data) => {
-      console.log("🛒 API Response:", data);
-  
       if (data?.payload?.success) {
-        dispatch(fetchCartItems(user.id));
-        toast({ title: "Product added to cart" });
+        dispatch(fetchCartItems(user?.id));
+        toast({ title: "Product is added to cart" });
       } else {
-        toast({
-          title: "Error adding product",
-          description: data?.payload?.message || "Something went wrong",
-          variant: "destructive",
-        });
+        toast({ title: "Failed to add product", variant: "destructive" });
       }
     });
   }
-  
+
+
 
 
   useEffect(() => {
@@ -600,16 +594,15 @@ function ShoppingHome() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      
+
       {/* Hero Section - Banner Slider */}
       <div className="relative w-full h-[600px] overflow-hidden">
         {bannerImages.map((slide, index) => (
           <img
             src={slide}
             key={index}
-            className={`${
-              index === currentSlide ? "opacity-100" : "opacity-0"
-            } absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000`}
+            className={`${index === currentSlide ? "opacity-100" : "opacity-0"
+              } absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000`}
           />
         ))}
         <Button
@@ -660,14 +653,15 @@ function ShoppingHome() {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">Feature Products</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {productList.length > 0 && productList.map((productItem) => (
-              <ShoppingProductTile 
-                key={productItem.id} 
-                handleGetProductDetails={handleGetProductDetails} 
-                product={productItem} 
-                handleAddtoCart={() => handleAddToCart(productItem.id)} 
-              />
-            ))}
+            {productList.length > 0 &&
+              productList.map((productItem) => (
+                <ShoppingProductTile
+                  key={productItem._id}  // Ensure `_id` exists
+                  product={productItem}
+                  handleGetProductDetails={handleGetProductDetails}
+                  handleAddToCart={() => handleAddToCart(productItem._id)}  // Pass `_id`
+                />
+              ))}
           </div>
         </div>
       </section>
