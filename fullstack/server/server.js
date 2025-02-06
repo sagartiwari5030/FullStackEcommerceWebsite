@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
@@ -15,20 +16,18 @@ const shopReviewRouter = require("./routes/shop/review-routes");
 
 const commonFeatureRouter = require("./routes/common/feature-routes");
 
-//create a database connection -> u can also
-//create a separate file for this and then import/use that file here
-
+// Database connection
 mongoose
-  .connect("mongodb+srv://sagartiwari5030:12345@clusterecom.5kdn9.mongodb.net/")
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
-  .catch((error) => console.log(error,"wrong connection haii"));
+  .catch((error) => console.log(error, "wrong connection haii"));
 
 const app = express();
 const PORT = process.env.PORT || 9000;
 
 app.use(
   cors({
-    origin: "http://localhost:5174",
+    origin: process.env.CORS_ORIGIN,
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: [
       "Content-Type",
