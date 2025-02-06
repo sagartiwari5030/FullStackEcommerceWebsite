@@ -317,23 +317,22 @@ function ShoppingHome() {
     dispatch(fetchProductDetails(getCurrentProductId));
   }
 
-  function handleAddToCart(getCurrentProductId) {
-    if (!isAuthenticated) {
-      // ✅ If user is not logged in, redirect to login/signup page
-      navigate("/auth/login");
-    } else {
-      // ✅ If user is logged in, add the product to the cart
-      dispatch(addToCart({ userId: user?.id, productId: getCurrentProductId, quantity: 1 }))
-        .then((data) => {
-          if (data?.payload?.success) {
-            dispatch(fetchCartItems(user?.id));
-            toast({ title: "Product is added to cart" });
-          }
+  function handleAddtoCart(getCurrentProductId) {
+    dispatch(
+      addToCart({
+        userId: user?.id,
+        productId: getCurrentProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id));
+        toast({
+          title: "Product is added to cart",
         });
-    }
+      }
+    });
   }
-
-
 
 
   useEffect(() => {
@@ -417,13 +416,15 @@ function ShoppingHome() {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">Feature Products</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {productList.length > 0 ? (
-              productList.map((productItem) => (
-                <ShoppingProductTile key={productItem.id} handleGetProductDetails={handleGetProductDetails} product={productItem} handleAddToCart={handleAddToCart} />
-              ))
-            ) : (
-              <p className="text-center text-gray-500">No products available.</p>
-            )}
+          {productList && productList.length > 0
+              ? productList.map((productItem) => (
+                  <ShoppingProductTile
+                    handleGetProductDetails={handleGetProductDetails}
+                    product={productItem}
+                    handleAddtoCart={handleAddtoCart}
+                  />
+                ))
+              : null}
           </div>
         </div>
       </section>
