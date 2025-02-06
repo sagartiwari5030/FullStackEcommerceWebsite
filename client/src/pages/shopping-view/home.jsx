@@ -520,21 +520,63 @@ function ShoppingHome() {
     dispatch(fetchProductDetails(getCurrentProductId));
   }
 
+  // function handleAddToCart(getCurrentProductId) {
+  //   if (!isAuthenticated) {
+  //     // ✅ If user is not logged in, redirect to login/signup page
+  //     navigate("/auth/login");
+  //   } else {
+  //     // ✅ If user is logged in, add the product to the cart
+  //     dispatch(addToCart({ userId: user?.id, productId: getCurrentProductId, quantity: 1 }))
+  //       .then((data) => {
+  //         if (data?.payload?.success) {
+  //           dispatch(fetchCartItems(user?.id));
+  //           toast({ title: "Product is added to cart" });
+  //         }
+  //       });
+  //   }
+  // }
+
   function handleAddToCart(getCurrentProductId) {
-    if (!isAuthenticated) {
-      // ✅ If user is not logged in, redirect to login/signup page
-      navigate("/auth/login");
-    } else {
-      // ✅ If user is logged in, add the product to the cart
-      dispatch(addToCart({ userId: user?.id, productId: getCurrentProductId, quantity: 1 }))
-        .then((data) => {
-          if (data?.payload?.success) {
-            dispatch(fetchCartItems(user?.id));
-            toast({ title: "Product is added to cart" });
-          }
-        });
+    if (!user || !user.id) {
+      console.error("❌ User is not logged in. Redirecting to login.");
+      navigate("/auth/login");  // 🚀 Redirect to login
+      return;
     }
+  
+    if (!getCurrentProductId) {
+      console.error("❌ Product ID is missing!");
+      return;
+    }
+  
+    console.log("🛒 Adding product to cart:", {
+      userId: user?.id,
+      productId: getCurrentProductId,
+      quantity: 1,
+    });
+  
+    dispatch(
+      addToCart({
+        userId: user.id,  // Ensure user ID exists
+        productId: getCurrentProductId, // Ensure product ID exists
+        quantity: 1, // Default quantity
+      })
+    ).then((data) => {
+      console.log("🛒 API Response:", data);
+  
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user.id));
+        toast({ title: "Product added to cart" });
+      } else {
+        toast({
+          title: "Error adding product",
+          description: data?.payload?.message || "Something went wrong",
+          variant: "destructive",
+        });
+      }
+    });
   }
+  
+
 
   useEffect(() => {
     if (productDetails !== null) setOpenDetailsDialog(true);

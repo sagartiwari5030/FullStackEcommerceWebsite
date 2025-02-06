@@ -27,11 +27,10 @@ export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async ({ userId, productId, quantity }, { rejectWithValue }) => {
     try {
-      // ✅ Debugging: Log the data being sent
-      console.log("🛒 Adding to Cart - Payload:", { userId, productId, quantity });
+      // ✅ Debugging logs
+      console.log("🛒 Sending Add to Cart Request:", { userId, productId, quantity });
 
-      // 🚀 Ensure userId, productId, and quantity are present before making the request
-      if (!userId || !productId || !quantity) {
+      if (!userId || !productId || quantity < 1) {
         throw new Error("Invalid data! Missing userId, productId, or quantity.");
       }
 
@@ -44,7 +43,7 @@ export const addToCart = createAsyncThunk(
         }
       );
 
-      console.log("🛒 Add to Cart Response:", response.data); // ✅ Log the API response
+      console.log("🛒 Add to Cart Response:", response.data);
       return response.data;
     } catch (error) {
       console.error("❌ Add to Cart Error:", error.response?.data || error.message);
@@ -52,9 +51,6 @@ export const addToCart = createAsyncThunk(
     }
   }
 );
-
-
-
 
 
 
