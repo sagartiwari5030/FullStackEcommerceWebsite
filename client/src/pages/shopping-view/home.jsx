@@ -522,17 +522,18 @@ function ShoppingHome() {
 
   function handleAddToCart(getCurrentProductId) {
     if (!isAuthenticated) {
-      navigate("/auth/login"); // ✅ Redirect to login if not authenticated
-      return;
+      // ✅ If user is not logged in, redirect to login/signup page
+      navigate("/auth/login");
+    } else {
+      // ✅ If user is logged in, add the product to the cart
+      dispatch(addToCart({ userId: user?.id, productId: getCurrentProductId, quantity: 1 }))
+        .then((data) => {
+          if (data?.payload?.success) {
+            dispatch(fetchCartItems(user?.id));
+            toast({ title: "Product is added to cart" });
+          }
+        });
     }
-
-    dispatch(addToCart({ userId: user?.id, productId: getCurrentProductId, quantity: 1 }))
-      .then((data) => {
-        if (data?.payload?.success) {
-          dispatch(fetchCartItems(user?.id));
-          toast({ title: "Product is added to cart" });
-        }
-      });
   }
 
   useEffect(() => {
@@ -542,7 +543,7 @@ function ShoppingHome() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % bannerImages.length);
-    }, 5000);
+    }, 5000); // Auto-slide every 5 seconds
 
     return () => clearInterval(timer);
   }, [bannerImages]);
@@ -557,14 +558,16 @@ function ShoppingHome() {
 
   return (
     <div className="flex flex-col min-h-screen">
+      
       {/* Hero Section - Banner Slider */}
-      <div className="relative w-full h-[500px] overflow-hidden">
+      <div className="relative w-full h-[600px] overflow-hidden">
         {bannerImages.map((slide, index) => (
           <img
             src={slide}
             key={index}
-            className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ${index === currentSlide ? "opacity-100" : "opacity-0"
-              }`}
+            className={`${
+              index === currentSlide ? "opacity-100" : "opacity-0"
+            } absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000`}
           />
         ))}
         <Button
@@ -595,10 +598,14 @@ function ShoppingHome() {
           <h2 className="text-3xl font-bold text-center mb-8">Shop by Category</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {furnitureCategories.map((categoryItem) => (
-              <Card key={categoryItem.id} onClick={() => handleNavigateToListingPage(categoryItem, "category")} className="cursor-pointer hover:shadow-lg transition-shadow">
-                <CardContent className="flex flex-col items-center justify-center p-4">
-                  <img src={categoryItem.image} alt={categoryItem.label} className="w-20 h-20 object-cover mb-2 rounded-md" />
-                  <span className="font-bold text-center text-sm">{categoryItem.label}</span>
+              <Card
+                key={categoryItem.id}
+                onClick={() => handleNavigateToListingPage(categoryItem, "category")}
+                className="cursor-pointer hover:shadow-lg transition-shadow"
+              >
+                <CardContent className="flex flex-col items-center justify-center p-6">
+                  <img src={categoryItem.image} alt={categoryItem.label} className="w-16 h-16 mb-4" />
+                  <span className="font-bold">{categoryItem.label}</span>
                 </CardContent>
               </Card>
             ))}
@@ -609,20 +616,16 @@ function ShoppingHome() {
       {/* Feature Products */}
       <section className="py-12">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">Feature Products</h2>
+          <h2 className="text-3xl font-bold text-center mb-8">Feature  c Products</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {productList.length > 0 ? (
-              productList.map((productItem) => (
-                <ShoppingProductTile
-                  key={productItem.id}
-                  handleGetProductDetails={handleGetProductDetails}
-                  product={productItem}
-                  handleAddToCart={() => handleAddToCart(productItem.id)} // ✅ Correct - function is passed as a reference
-                />
-              ))
-            ) : (
-              <p className="text-center text-gray-500">No products available.</p>
-            )}
+            {productList.length > 0 && productList.map((productItem) => (
+              <ShoppingProductTile 
+                key={productItem.id} 
+                handleGetProductDetails={handleGetProductDetails} 
+                product={productItem} 
+                handleAddtoCart={() => handleAddToCart(productItem.id)} 
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -633,3 +636,4 @@ function ShoppingHome() {
 }
 
 export default ShoppingHome;
+
