@@ -51,11 +51,12 @@ const createOrder = async (req, res) => {
 
     paypal.payment.create(create_payment_json, async (error, paymentInfo) => {
       if (error) {
-        console.log(error);
+        console.error("🚨 PayPal API Error:", error.response); // Log detailed error
 
         return res.status(500).json({
           success: false,
           message: "Error while creating paypal payment",
+          error: error.response,
         });
       } else {
         const newlyCreatedOrder = new Order({
