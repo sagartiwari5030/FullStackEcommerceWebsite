@@ -347,7 +347,7 @@
 
 //   return (
 //     <div className="flex flex-col min-h-screen">
-      
+
 //       {/* Hero Section - Banner Slider */}
 //       <div className="relative w-full h-[600px] overflow-hidden">
 //         {bannerImages.map((slide, index) => (
@@ -563,9 +563,8 @@ function ShoppingHome() {
           <img
             src={slide}
             key={index}
-            className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ${
-              index === currentSlide ? "opacity-100" : "opacity-0"
-            }`}
+            className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ${index === currentSlide ? "opacity-100" : "opacity-0"
+              }`}
           />
         ))}
         <Button
@@ -614,7 +613,12 @@ function ShoppingHome() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {productList.length > 0 ? (
               productList.map((productItem) => (
-                <ShoppingProductTile key={productItem.id} handleGetProductDetails={handleGetProductDetails} product={productItem} handleAddToCart={handleAddToCart} />
+                <ShoppingProductTile
+                  key={productItem.id}
+                  handleGetProductDetails={handleGetProductDetails}
+                  product={productItem}
+                  handleAddToCart={() => handleAddToCart(productItem.id)} // ✅ Correct - function is passed as a reference
+                />
               ))
             ) : (
               <p className="text-center text-gray-500">No products available.</p>
