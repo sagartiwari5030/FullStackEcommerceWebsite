@@ -26,12 +26,12 @@ const initialState = {
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async ({ userId, productId, quantity }, { rejectWithValue }) => {
-    if (!userId || !productId || quantity <= 0) {
-      console.error("❌ Invalid Add to Cart Data:", { userId, productId, quantity });
-      return rejectWithValue("Invalid Data: Missing userId, productId, or quantity!");
+    if (!productId) {
+      console.error("❌ Product ID is missing!");
+      return rejectWithValue("Product ID is missing!");
     }
 
-    console.log("🛒 Sending Add to Cart Request:", { userId, productId, quantity });
+    console.log("🛒 Adding to Cart Request: ", { userId, productId, quantity });
 
     try {
       const response = await axios.post(
@@ -39,7 +39,7 @@ export const addToCart = createAsyncThunk(
         { userId, productId, quantity }
       );
 
-      console.log("✅ Cart API Response:", response.data);
+      console.log("✅ Cart API Response: ", response.data);
       return response.data;
     } catch (error) {
       console.error("❌ Add to Cart API Error:", error.response?.data || error);
