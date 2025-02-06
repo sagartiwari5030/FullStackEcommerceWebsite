@@ -6,21 +6,60 @@ const initialState = {
   isLoading: false,
 };
 
+// export const addToCart = createAsyncThunk(
+//   "cart/addToCart",
+//   async ({ userId, productId, quantity }) => {
+//     const response = await axios.post(
+//       "https://fullstackecommercerameshwer.onrender.com/api/shop/cart/add",
+//       {
+//         userId,
+//         productId,
+//         quantity,
+//       }
+//     );
+
+//     return response.data;
+//   }
+// );
+
+
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
-  async ({ userId, productId, quantity }) => {
-    const response = await axios.post(
-      "https://fullstackecommercerameshwer.onrender.com/api/shop/cart/add",
-      {
-        userId,
-        productId,
-        quantity,
-      }
-    );
+  async ({ userId, productId, quantity }, { rejectWithValue }) => {
+    try {
+      // ✅ Debugging: Log the data being sent
+      console.log("🛒 Adding to Cart - Payload:", { userId, productId, quantity });
 
-    return response.data;
+      // 🚀 Ensure userId, productId, and quantity are present before making the request
+      if (!userId || !productId || !quantity) {
+        throw new Error("Invalid data! Missing userId, productId, or quantity.");
+      }
+
+      const response = await axios.post(
+        "https://fullstackecommercerameshwer.onrender.com/api/shop/cart/add",
+        {
+          userId,
+          productId,
+          quantity,
+        }
+      );
+
+      console.log("🛒 Add to Cart Response:", response.data); // ✅ Log the API response
+      return response.data;
+    } catch (error) {
+      console.error("❌ Add to Cart Error:", error.response?.data || error.message);
+      return rejectWithValue(error.response?.data || { message: "Failed to add to cart" });
+    }
   }
 );
+
+
+
+
+
+
+
+
 
 export const fetchCartItems = createAsyncThunk(
   "cart/fetchCartItems",
