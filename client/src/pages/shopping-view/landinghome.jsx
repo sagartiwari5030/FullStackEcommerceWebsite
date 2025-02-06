@@ -13,7 +13,7 @@ import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
 import { useToast } from "@/components/ui/use-toast";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import { getFeatureImages } from "@/store/common-slice";
-import{LandinHeader} from "../../components/shopping-view/landingheader"
+import LandingHeader from "../../components/shopping-view/landingheader"
 
 // Import Banner Images
 import bannerOne from "../../assets/banner-1.png";
@@ -114,7 +114,7 @@ function LandingHome() {
   }, [dispatch]);
 
   return (<>
-   <LandinHeader/>
+   <LandingHeader/>
       <div className="flex flex-col min-h-screen">
       
       {/* Hero Section - Banner Slider */}
