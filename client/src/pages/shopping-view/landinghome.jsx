@@ -13,6 +13,7 @@ import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
 import { useToast } from "@/components/ui/use-toast";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import { getFeatureImages } from "@/store/common-slice";
+import{LandinHeader} from "../../components/shopping-view/landingheader"
 
 // Import Banner Images
 import bannerOne from "../../assets/banner-1.png";
@@ -112,8 +113,9 @@ function LandingHome() {
     dispatch(getFeatureImages());
   }, [dispatch]);
 
-  return (
-    <div className="flex flex-col min-h-screen">
+  return (<>
+   <LandinHeader/>
+      <div className="flex flex-col min-h-screen">
       
       {/* Hero Section - Banner Slider */}
       <div className="relative w-full h-[600px] overflow-hidden">
@@ -188,6 +190,7 @@ function LandingHome() {
 
       <ProductDetailsDialog open={openDetailsDialog} setOpen={setOpenDetailsDialog} productDetails={productDetails} />
     </div>
+    </>
   );
 }
 
