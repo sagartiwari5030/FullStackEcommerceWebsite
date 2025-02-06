@@ -10,7 +10,7 @@ export const addReview = createAsyncThunk(
   "/order/addReview",
   async (formdata) => {
     const response = await axios.post(
-      `http://localhost:9000/api/shop/review/add`,
+      `https://render.com/docs/web-services#port-binding/api/shop/review/add`,
       formdata
     );
 
@@ -20,7 +20,7 @@ export const addReview = createAsyncThunk(
 
 export const getReviews = createAsyncThunk("/order/getReviews", async (id) => {
   const response = await axios.get(
-    `http://localhost:9000/api/shop/review/${id}`
+    `https://render.com/docs/web-services#port-binding/api/shop/review/${id}`
   );
 
   return response.data;

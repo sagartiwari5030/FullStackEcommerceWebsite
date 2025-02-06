@@ -50,7 +50,7 @@ function ProductImageUpload({
     const data = new FormData();
     data.append("my_file", imageFile);
     const response = await axios.post(
-      "http://localhost:9000/api/admin/products/upload-image",
+      "https://render.com/docs/web-services#port-binding/api/admin/products/upload-image",
       data
     );
     console.log(response, "response");

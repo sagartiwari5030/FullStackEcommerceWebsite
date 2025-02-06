@@ -18,7 +18,7 @@ export const fetchAllFilteredProducts = createAsyncThunk(
     });
 
     const result = await axios.get(
-      `http://localhost:9000/api/shop/products/get?${query}`
+      `https://render.com/docs/web-services#port-binding/api/shop/products/get?${query}`
     );
 
     console.log(result);
@@ -31,7 +31,7 @@ export const fetchProductDetails = createAsyncThunk(
   "/products/fetchProductDetails",
   async (id) => {
     const result = await axios.get(
-      `http://localhost:9000/api/shop/products/get/${id}`
+      `https://render.com/docs/web-services#port-binding/api/shop/products/get/${id}`
     );
 
     return result?.data;
