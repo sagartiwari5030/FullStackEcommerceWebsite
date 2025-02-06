@@ -288,6 +288,8 @@ export const addProductFormElements = [
     componentType: "select",
     options: [
       { id: "sofa", label: "Sofa" },
+      { id: "2seatersofa", label: "2 Seater Sofa" },
+      { id: "3seatersofa", label: "3 Seater Sofa" },
       { id: "beds", label: "Beds" },
       { id: "dining_sets", label: "Dining Sets" },
       { id: "study_table", label: "Study Table" },
@@ -388,6 +390,8 @@ export const shoppingViewHeaderMenuItems = [
 
 export const categoryOptionsMap = {
   sofa: "Sofa",
+  twoseatersofa: "2 Seater Sofa",
+  threeseatersofa: "3 Seater Sofa",
   beds: "Beds",
   dining_sets: "Dining Sets",
   study_table: "Study Table",
