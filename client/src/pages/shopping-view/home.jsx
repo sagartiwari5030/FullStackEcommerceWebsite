@@ -537,7 +537,10 @@ function ShoppingHome() {
   // }
 
   function handleAddToCart(getCurrentProductId) {
+    console.log("🛒 handleAddToCart Triggered. Checking Authentication...");
+
     if (!user) {
+      console.warn("❌ User is not authenticated. Redirecting to login...");
       navigate("/auth/login");
       return;
     }
@@ -547,7 +550,7 @@ function ShoppingHome() {
       return;
     }
 
-    console.log("🛒 Sending Add to Cart Request:", {
+    console.log("🛒 Adding Product to Cart:", {
       userId: user?.id,
       productId: getCurrentProductId,
       quantity: 1,
@@ -656,12 +659,13 @@ function ShoppingHome() {
             {productList.length > 0 &&
               productList.map((productItem) => (
                 <ShoppingProductTile
-                  key={productItem._id}  // Ensure `_id` exists
+                  key={productItem._id} // Ensure `_id` exists
                   product={productItem}
                   handleGetProductDetails={handleGetProductDetails}
-                  handleAddToCart={() => handleAddToCart(productItem._id)}  // Pass `_id`
+                  handleAddToCart={() => handleAddToCart(productItem._id)} // Pass `_id`
                 />
               ))}
+
           </div>
         </div>
       </section>
